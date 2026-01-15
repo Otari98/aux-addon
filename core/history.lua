@@ -26,7 +26,18 @@ function aux.handle.LOAD2()
 	data = aux.faction_data.history
 	local _, name = GetChannelName("LFT")
 	if aux.account_data.sharing and not name then
-		JoinChannelByName("LFT")
+		aux.thread(aux.when, aux.later(5), function()
+			local shouldJoin = true
+			for i, channel in ipairs({GetChannelList()}) do
+				if channel == "LFT" then
+					shouldJoin = false
+					break
+				end
+			end
+			if shouldJoin then
+				JoinChannelByName("LFT")
+			end
+		end)
 	end
 end
 
